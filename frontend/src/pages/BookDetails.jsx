@@ -8,6 +8,9 @@ import { FaCartPlus } from "react-icons/fa";
 import { MdOutlineFavorite } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { FaEdit } from "react-icons/fa";
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 import { MdDelete } from "react-icons/md";
 
@@ -20,9 +23,51 @@ import { MdDelete } from "react-icons/md";
 
 function BookDetails() {
   const {id}=useParams();
+  const nav=useNavigate();
   const [bookData,setBookData]=useState();
   const isLoggedIn= useSelector((state)=> state.auth.isLoggedIn);
   const role=useSelector((state)=> state.auth.role);
+ const headers = {
+  id: localStorage.getItem("id"),
+  authorization: `Bearer ${localStorage.getItem("token")}`,
+  bookid:id
+};
+ 
+
+  const handleDeleteBook=async ()=>{
+
+     try {
+
+      const res= await axios.delete("http://localhost:1000/api/v1/delete-book",{headers});
+       alert(res.data.message);
+       nav("/");
+       console.log(res);
+      
+     } catch (error) {
+         console.log(error);
+     }
+
+
+    
+
+  }
+  // const handleEditBook =()=>{
+
+  //     try {
+
+  //       const res=axios.put("http://localhost:1000/api/v1/update-book",{headers})
+
+  //      console.log(res)
+  //      alert(res.data.message);
+        
+  //     } catch (error) {
+  //        console.log(error);
+  //     }
+
+      
+    
+  // }
+
 
 
 
@@ -37,11 +82,7 @@ function BookDetails() {
          
 },[])
 
-const headers = {
-  id: localStorage.getItem("id"),
-  authorization: `Bearer ${localStorage.getItem("token")}`,
-  bookid:id
-};
+
 
 async function handleFav(){
       const response=await axios.put("http://localhost:1000/api/v1/add-book-to-fav/",{},{headers});
@@ -129,6 +170,8 @@ async function handleFav(){
         isLoggedIn==true && role=='admin' && 
         <div className='flex justify-evenly mt-4'>
 
+          <Link to={`/edit-book/${id}`}>
+
         <button className='flex p-2 gap-2 items-center justify-center border rounded-md bg-red-800  hover:opacity-85  focus:ring-1'>
         <div className=''>
           Edit
@@ -140,8 +183,9 @@ async function handleFav(){
           
 
         </button>
+        </Link>
        
-        <button className='flex p-2 gap-2 items-center justify-center border rounded-md bg-yellow-800 hover:bg-yellow-900'>
+        <button className='flex p-2 gap-2 items-center justify-center border rounded-md bg-yellow-800 hover:bg-yellow-900' onClick={handleDeleteBook}>
         <div className=''>
           Delete
           
