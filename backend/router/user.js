@@ -1,5 +1,6 @@
 const router=require("express").Router();
 const User=require("../models/user");
+//const User=require("../models/user");
 const bcrypt=require("bcryptjs");
 const jwt=require("jsonwebtoken");
 const {authenticateToken}=require("./userAuth")
@@ -51,7 +52,7 @@ router.post("/sign-in",async (req,res)=>{
   try {
      const {username,password}=req.body
      const existingUser=await User.findOne({username:username})
-     if(!existingUser){
+     if(!existingUser){ 
        return res.status(400).json({message:"invalid credentials"});
      }
      await bcrypt.compare(password,existingUser.password,(err,data)=>{
@@ -65,6 +66,26 @@ router.post("/sign-in",async (req,res)=>{
           res.status(400).json({message:"invalid credentials"});
         }
      })
+     if (!existingUser) {
+  return res.status(400).json({ message: "invalid credentials" });
+}
+
+// const isMatch = await bcrypt.compare(password, existingUser.password);
+// if (!isMatch) {
+//   return res.status(400).json({ message: "invalid credentials" });
+// }
+
+// const token = jwt.sign(
+//   { id: existingUser._id, role: existingUser.role },
+//   "bookStore123"
+// );
+
+// res.status(200).json({
+//   id: existingUser._id,
+//   role: existingUser.role,
+//   token
+// });
+
   } catch (error) {
      console.log("error",error)
       return res.status(500).json({message:"internal server error",data:error});

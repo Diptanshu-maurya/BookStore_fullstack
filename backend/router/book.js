@@ -46,11 +46,14 @@ router.post("/add-book",authenticateToken,upload.single("image"),async (req,res)
   }
 })
 
-router.put("/update-book",authenticateToken,async (req,res)=>{
+router.put("/update-book",authenticateToken,upload.single("image"),async (req,res)=>{
   try {
      const {bookid}=req.headers;
+    // console.log("update route hit");
+     console.log("bookid",bookid);
+     const imageUrl = req.file ? `/images/${req.file.filename}` : "";
      await Book.findByIdAndUpdate(bookid,{
-        url:req.body.url,
+        url:imageUrl,
         title:req.body.title,
         author:req.body.author,
         price:req.body.price,
@@ -59,6 +62,7 @@ router.put("/update-book",authenticateToken,async (req,res)=>{
      });
      return res.status(200).json({message:"book updated successfully"});
   } catch (error) {
+    console.log(error)
     res.status(500).json({message:"Intenal server error"});
   }
 })

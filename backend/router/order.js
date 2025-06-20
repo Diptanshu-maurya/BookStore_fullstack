@@ -26,7 +26,7 @@ router.post("/place-order", authenticateToken, async (req, res) => {
 
     await User.findByIdAndUpdate(id, {
       $push: { orders: { $each: orderIds } },
-      $set: { cart: [] }, // Clears the cart completely
+      $set: { cart: [] },
     });
 
     return res.json({ status: "Success", message: "Order placed successfully" });

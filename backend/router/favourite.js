@@ -74,7 +74,7 @@ router.put("/remove-book-from-fav", authenticateToken, async (req, res) => {
 
 router.get("/get-fav-books", authenticateToken, async (req, res) => {
   try {
-    const { id } = req.headers;  // ✅ Corrected header extraction
+    const { id } = req.headers;  
 
     if (!id) {
       return res.status(400).json({ message: "User ID is required" });

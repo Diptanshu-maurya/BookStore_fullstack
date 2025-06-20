@@ -19,10 +19,9 @@ app.use("/api/v1",favourite);
 app.use("/api/v1",cart);
 app.use("/api/v1",order);
 
-// app.get("/",(req,res)=>{
-//   res.send("hello from backend");
-// })
 
 app.listen(process.env.PORT,()=>{
   console.log("server started");
 });
+
+
